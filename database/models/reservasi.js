@@ -21,8 +21,8 @@ const reservasiSchema = new mongoose.Schema(
         status           : { type: String, 
                              enum: ['Booked', 'Completed', 'Cancelled'], required: true },
 
-        admin_id         : { type: mongoose.Schema.Types.ObjectId, 
-                             ref: 'User', required: true },
+        admin_id         : { type: String, // type: mongoose.Schema.Types.ObjectId, 
+                             /* ref: 'User', */ required: true },
     },
     {
         collection: "reservasi", // Nama koleksi tetap "reservasi"

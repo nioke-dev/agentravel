@@ -6,7 +6,7 @@ const logTransaksiSchema = new mongoose.Schema(
         reference_type  : { type: String, enum: ['reservation', 'invoice'], required: true },
         action          : { type: String, required: true },
         action_date     : { type: Date, required: true },
-        performed_by    : { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        performed_by    : { type: String /* mongoose.Schema.Types.ObjectId, ref: 'User' */, required: true },
 
     }, 
     {

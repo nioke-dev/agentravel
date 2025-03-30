@@ -1,52 +1,89 @@
 import mongoose from 'mongoose';
 
-const penggunaSchema = new mongoose.Schema({
-  nama: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
+const sessionSchema = new mongoose.Schema(
+  {
+    userId    : { type: String, required: true},
+    expiredAt : { type: Date, required: true },
+  },
+  { collection: "session", /* timestamps: true */ }
+);
 
-const customerSchema = new mongoose.Schema({
-  nama: { type: String, required: true },
-  kontak: { type: String, required: true },
-  alamat: { type: String, required: true },
-}, { timestamps: true });
+const penggunaSchema = new mongoose.Schema(
+  {
+    username  : { type: String, required: true, unique: true },
+    email     : { type: String },
+    password  : { type: String, required: true },
+    role      : { type: String, enum: ['Admin Travel Agent', 'Tim Keuangan'], required: true },
+  },
+  { collection: "pengguna", timestamps: true }
+);
 
-const reservasiSchema = new mongoose.Schema({
-  customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
-  tanggal: { type: Date, required: true },
-  layanan: { type: String, required: true },
-}, { timestamps: true });
+const reservasiSchema = new mongoose.Schema(
+  {
+    nik              : { type: Number, required: true },
+    name             : { type: String, required: true },
+    contact          : { type: String, required: true },
+    ticket_id        : { type: Number, required: true },
+    destination      : { type: String, required: true },
+    date             : { type: Date, required: true },
+    estimated_budget : { type: mongoose.Types.Decimal128, required: true },
+    total_price      : { type: mongoose.Types.Decimal128, required: true },
+    payment_method   : { type: String, enum: ['Prepaid', 'Postpaid'], required: true },
+    payment_status   : { type: String, enum: ['Pending', 'Paid'], required: true },
+    status           : { type: String, enum: ['Booked', 'Completed', 'Cancelled'], required: true },
+    admin_id         : { type: String, required: true },
+  },
+  { collection: "reservasi", timestamps: true }
+);
 
-const pembayaranSchema = new mongoose.Schema({
-  reservasiId: { type: mongoose.Schema.Types.ObjectId, ref: 'Reservasi', required: true },
-  jumlah: { type: Number, required: true },
-  metode: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'berhasil', 'gagal'], default: 'pending' },
-}, { timestamps: true });
+const pembayaranSchema = new mongoose.Schema(
+  {
+    reservasiId : { type: String /* mongoose.Schema.Types.ObjectId, ref: 'Reservasi' */, required: true },
+    jumlah      : { type: Number, required: true },
+    metode      : { type: String, required: true },
+    status      : { type: String, enum: ['pending', 'berhasil', 'gagal'], default: 'pending' },
+  },
+  { collection: "pembayaran", timestamps: true }
+);
 
-const invoisSchema = new mongoose.Schema({
-  pembayaranId: { type: mongoose.Schema.Types.ObjectId, ref: 'Pembayaran', required: true },
-  nomorInvois: { type: String, required: true, unique: true },
-  tanggalTerbit: { type: Date, default: Date.now },
-}, { timestamps: true });
+const invoisSchema = new mongoose.Schema(
+  {
+    reservation_id : { type: String, required: true },
+    total_amount   : { type: mongoose.Types.Decimal128, required: true },
+    fee            : { type: mongoose.Types.Decimal128, required: true },
+    payment_method : { type: String, enum: ['Bank Transfer', 'Credit Card', 'Cash'], required: true },
+    payment_date   : { type: Date, required: true },
+    issued_date    : { type: Date, required: true },
+    due_date       : { type: Date, required: true },
+    status         : { type: String, enum: ['Unpaid', 'Paid'], required: true },
+  },
+  { collection: "invois", timestamps: true }
+);
 
-const logTransaksiSchema = new mongoose.Schema({
-  tipe: { type: String, required: true },
-  deskripsi: { type: String, required: true },
-  waktu: { type: Date, default: Date.now },
-}, { timestamps: true });
+const logTransaksiSchema = new mongoose.Schema(
+  {
+    reference_id  : { type: Number, required: true },
+    reference_type: { type: String, enum: ['reservation', 'invoice'], required: true },
+    action        : { type: String, required: true },
+    action_date   : { type: Date, required: true },
+    performed_by  : { type: String, required: true },
+  },
+  { collection: "log-transaksi", timestamps: true }
+);
 
-const laporanSchema = new mongoose.Schema({
-  periode: { type: String, required: true },
-  totalTransaksi: { type: Number, required: true },
-  totalPendapatan: { type: Number, required: true },
-}, { timestamps: true });
+const laporanSchema = new mongoose.Schema(
+  {
+    amount    : { type: mongoose.Types.Decimal128, required: true },
+    created_by: { type: String, ref: 'User', required: true },
+  },
+  { collection: "laporan", timestamps: true }
+);
 
-export const Pengguna = mongoose.model('Pengguna', penggunaSchema);
-export const Customer = mongoose.model('Customer', customerSchema);
-export const Reservasi = mongoose.model('Reservasi', reservasiSchema);
-export const Pembayaran = mongoose.model('Pembayaran', pembayaranSchema);
-export const Invois = mongoose.model('Invois', invoisSchema);
-export const LogTransaksi = mongoose.model('LogTransaksi', logTransaksiSchema);
-export const Laporan = mongoose.model('Laporan', laporanSchema);
+export const Pengguna = mongoose.models.pengguna || mongoose.model('pengguna', penggunaSchema);
+export const Session = mongoose.models.pengguna || mongoose.model('session', sessionSchema);
+// export const Customer = mongoose.model('Customer', customerSchema);
+export const Reservasi = mongoose.models.reservasi || mongoose.model('reservasi', reservasiSchema);
+export const Pembayaran = mongoose.models.pembayaran || mongoose.model('pembayaran', pembayaranSchema);
+export const Invois = mongoose.models.invois || mongoose.model('invois', invoisSchema);
+export const LogTransaksi = mongoose.models.logTransaksi || mongoose.model('logTransaksi', logTransaksiSchema);
+export const Laporan = mongoose.models.laporan || mongoose.model('laporan', laporanSchema);
