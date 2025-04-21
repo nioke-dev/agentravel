@@ -86,6 +86,28 @@ app.get("/pengguna", async c => {
             }, 500); 
         }
     })
+    .get("/admin/pengguna", async c => {
+        console.log("Mengambil detail pengguna menurut id");
+        
+        // Query dan lain-lain
+        try {
+            const { username, password } = c.req.query();
+            const pengguna = await Pengguna.find({ username, password });
+            return c.json({ 
+                status: "berhasil", 
+                data: pengguna 
+            }, 200);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return c.json({ error: error.message }, 400);
+            }
+            return c.json({ 
+                status  : "gagal", 
+                message : 'Gagal mengambil data pengguna', 
+                error   : String(error) 
+            }, 500); 
+        }
+    })
     .post("/pengguna", async c => {
         console.log("Menambah data pengguna baru");
         
