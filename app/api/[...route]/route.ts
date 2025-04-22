@@ -6,7 +6,7 @@ import { Pengguna,
          Invois, 
          LogTransaksi, 
          Laporan 
-} from '@/database/models/all';
+} from '@/database/model/all';
 
 export const runtime = 'nodejs'; // Sesuaikan dengan environment
 const app = new Hono().basePath("/api");
