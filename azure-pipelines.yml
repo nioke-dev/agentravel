@@ -22,7 +22,7 @@ steps:
 
 resources:
   repositories:
-  - repository: agentravel
-    type: github
-    name: pdh-24/agentravel
-    endpoint: pdh-24/agentravel
+    - repository: agentravel
+      type: github
+      name: pdh-24/agentravel
+      endpoint: pdh-24/agentravel
