@@ -19,3 +19,10 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
+
+resources:
+  repositories:
+  - repository: agentravel
+    type: github
+    name: pdh-24/agentravel
+    endpoint: pdh-24/agentravel
