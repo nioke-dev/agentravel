@@ -10,6 +10,7 @@ import { signInSchema } from "@/app/lib/zod"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [ Google, GitHub, Apple,
+    /*
     Credentials({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
@@ -49,5 +50,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
+    */
   ],
 })
