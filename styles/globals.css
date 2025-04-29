@@ -28,8 +28,7 @@ body {
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
-    --border: 220 13% 91%;
+    --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --chart-1: 12 76% 61%;
@@ -84,14 +83,12 @@ body {
 }
 
 @layer base {
-  * {
-
-    border-color: var(--border);
-  }
-  body {
-
-    background-color: var(--background);
-    color: var(--foreground);
-  }
-
+    * {
+        border-color: var(--border);
+      }
+      body {
+        background-color: var(--background);
+        color: var(--foreground);
+      }
 }
+
