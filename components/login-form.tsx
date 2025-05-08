@@ -6,107 +6,103 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
+  const isFormValid = username.trim() !== "" && password.trim() !== "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setLoading(true);
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const params = new URLSearchParams({ username, password });
+      const res = await fetch(`/api/pengguna?${params.toString()}`);
+      const data = await res.json();
 
-    if (!res.ok) {
-      setError("Username atau password salah.");
-      return;
+      console.log('Login response:', data);
+      if (!res.ok || !data.data || data.data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Login gagal. Cek kembali username dan password."
+        });
+      } else {
+        toast({ title: "Login berhasil" });
+        // Attempt navigation
+        try {
+          await router.push('/dashboard');
+        } catch (navErr) {
+          console.warn('router.push failed, falling back to window.location', navErr);
+          window.location.href = '/dashboard';
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toast({
+        variant: "destructive",
+        title: "Terjadi kesalahan saat login"
+      });
+    } finally {
+      setLoading(false);
     }
-
-    const { role } = await res.json();
-    if (role === "admin" || role === "finance") {
-      router.push("/dashboard");
-    } 
   };
 
-  const canSubmit = username.trim() !== "" && password.trim() !== "";
-
   return (
-    <Card className="w-[360px] bg-white shadow-md rounded-[24px] border-none">
+    <Card className="w-[360px] bg-white shadow-md rounded-2xl border-none">
       <CardContent className="px-6 py-8">
-        {/* Header */}
         <h2 className="text-xl font-bold text-center">Login</h2>
         <p className="text-gray-500 text-center mt-1 mb-8 text-sm">
           Please login to admin dashboard
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Username */}
+        <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm mx-auto">
           <div>
-            <Label
-              htmlFor="username"
-              className="block text-xs font-medium text-black mb-1"
-            >
-              Username
-            </Label>
+            <Label htmlFor="username" className="block text-xs font-medium text-black mb-1">Username</Label>
             <Input
               id="username"
               type="text"
               placeholder="Enter your username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
               required
               className="w-full py-2 px-3 border border-gray-300 rounded-full placeholder-gray-300 text-sm"
             />
           </div>
-
-          {/* Password */}
-          <div className="relative">
-            <Label
-              htmlFor="password"
-              className="block text-xs font-medium text-black mb-1"
-            >
-              Password
-            </Label>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full py-2 px-3 border border-gray-300 rounded-full placeholder-gray-300 text-sm"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-8 flex items-center"
-            >
-              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
-            </button>
+          <div>
+            <Label htmlFor="password" className="block text-xs font-medium text-black mb-1">Password</Label>
+            <div className="relative mt-1">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="w-full py-2 px-3 border border-gray-300 rounded-full placeholder-gray-300 text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center"
+              >
+                {showPassword ? <Eye strokeWidth={1}  /> : <EyeOff strokeWidth={1} />}
+              </button>
+            </div>
           </div>
 
-          {/* Error Message */}
-          {error && <p className="text-red-500 text-xs">{error}</p>}
-
-          {/* Submit */}
           <Button
             type="submit"
-            disabled={!canSubmit}
-            className={`
-              w-full py-2 rounded-full text-sm font-medium
-              ${canSubmit
-                ? "bg-[#377dec] text-white hover:bg-blue-700"
-                : "bg-gray-500 text-white cursor-not-allowed"}
-            `}
+            className={`w-full rounded-full text-white ${isFormValid ? 'bg-[#377dec] hover:bg-[#4a8ef0]' : 'bg-gray-700 cursor-not-allowed'}`}
+            disabled={loading || !isFormValid}
           >
-            Login
+            {loading ? 'Logging in...' : 'Log In'}
           </Button>
         </form>
       </CardContent>

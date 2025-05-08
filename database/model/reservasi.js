@@ -9,8 +9,8 @@ const reservasiSchema = new mongoose.Schema(
         destination      : { type: String, required: true },
         date             : { type: Date, required: true },
         
-        estimated_budget : { type: mongoose.Types.Decimal128, required: true },
-        total_price      : { type: mongoose.Types.Decimal128, required: true },
+        estimated_budget : { type: Number, required: true },
+        total_price      : { type: Number, required: true },
         
         payment_method   : { type: String, 
                              enum: ['Prepaid', 'Postpaid'], required: true },
