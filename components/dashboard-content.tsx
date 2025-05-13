@@ -1,16 +1,10 @@
 "use client"
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useIsMobile } from "@/hooks/use-mobile"
-
-const metrics = [
-  { title: "Total Reservations", value: "6", icon: "calendar", color: "blue" },
-  { title: "Ongoing Reservations", value: "6", icon: "users", color: "blue" },
-  { title: "Unpaid Invoices", value: "6", icon: "file-text", color: "blue" },
-  { title: "Revenue This Month", value: "Rp. 200 K", icon: "dollar-sign", color: "blue" },
-]
 
 const data = [
   { name: "Apr", value: 20 },
@@ -26,6 +20,50 @@ const data = [
 
 export function DashboardContent() {
   const isMobile = useIsMobile()
+
+  // 🚀 Fetch live reservation count
+  const [totalReservations, setTotalReservations] = useState(0);
+  useEffect(() => {
+    async function fetchCount() {
+      try {
+        const res = await fetch("/api/reservasi");
+        const json = await res.json();
+        if (json.status === "berhasil" && Array.isArray(json.data)) {
+          setTotalReservations(json.data.length);
+        }
+      } catch (err) {
+        console.error("Failed to load reservation count", err);
+      }
+    }
+    fetchCount();
+  }, []);
+
+  const metrics = [
+    {
+      title: "Total Reservations",
+      value: totalReservations.toString(),
+      icon: "calendar",
+      color: "blue",
+    },
+    {
+      title: "Ongoing Reservations",
+      value: "6",
+      icon: "users",
+      color: "blue",
+    },
+    {
+      title: "Unpaid Invoices",
+      value: "6",
+      icon: "file-text",
+      color: "blue",
+    },
+    {
+      title: "Revenue This Month",
+      value: "Rp. 200 K",
+      icon: "dollar-sign",
+      color: "blue",
+    },
+  ]
 
   return (
     <main className="bg-gray-100 min-h-screen space-y-5">
@@ -62,7 +100,7 @@ export function DashboardContent() {
                 <CardTitle className="text-sm font-semibold">Monthly Reservations Statistics</CardTitle>
               </CardHeader>
               <CardContent className="pt-0 p-4">
-                <div className="h-[240px]">
+                <div className="h-[360px]">
                   <ChartContainer
                     config={{ value: { label: "Reservations", color: "hsl(var(--chart-1))" } }}
                   >

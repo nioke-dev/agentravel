@@ -16,12 +16,15 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 // Using the same navItems from sidebar.tsx
 const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: null },
-  { name: "Reservations", href: "/dashboard/reservations", icon: null },
-  { name: "Invoices", href: "/dashboard/invoices", icon: null },
-  { name: "History", href: "/dashboard/history", icon: null },
-  { name: "Reports", href: "/dashboard/reports", icon: null },
-  { name: "Settings", href: "/dashboard/settings", icon: null },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Reservations", href: "/dashboard/reservations" },
+  { name: "Invoices", href: "/dashboard/invoices" },
+  { name: "History", href: "/dashboard/history" },
+  { name: "Reports", href: "/dashboard/reports" },
+  { name: "Settings", href: "/dashboard/settings" },
+  { name: "Add Flight Reservation", href: "/dashboard/reservations/add" },
+  { name: "Details Reservation", href: "/dashboard/reservations/${r._id}" },
+  { name: "Edit Reservation", href: "/dashboard/reservations/edit/${r._id}" },
 ]
 
 export function Header() {
@@ -69,8 +72,8 @@ export function Header() {
           {formattedDate}
         </p>
 
-        <button className="p-2 rounded-full hover:bg-[#f5f5f5]">
-          <Bell size={20} className="text-[#3d3d3d]" />
+        <button className="p-2 rounded-full bg-[#f5f5f5] hover:bg-[#5D5D5D]">
+          <Bell size={20} className="text-[#3D3D3D]" />
         </button>
 
         <DropdownMenu>
