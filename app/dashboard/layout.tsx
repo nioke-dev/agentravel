@@ -1,7 +1,7 @@
 import type React from "react"
 import '@/app/globals.css'
-import { Sidebar } from "@/components/sidebar"
-import { Header } from "@/components/header"
+import { Sidebar } from "@/components/views/sidebar"
+import { Header } from "@/components/views/header"
 
 export default function DashboardLayout({
   children,

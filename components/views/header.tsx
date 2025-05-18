@@ -14,7 +14,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useIsMobile } from "@/hooks/use-mobile"
 
-// Using the same navItems from sidebar.tsx
+// Using the same navItems from sidebar.tsx but with proper route patterns
 const navItems = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Reservations", href: "/dashboard/reservations" },
@@ -22,9 +22,7 @@ const navItems = [
   { name: "History", href: "/dashboard/history" },
   { name: "Reports", href: "/dashboard/reports" },
   { name: "Settings", href: "/dashboard/settings" },
-  { name: "Add Flight Reservation", href: "/dashboard/reservations/add" },
-  { name: "Details Reservation", href: "/dashboard/reservations/${r._id}" },
-  { name: "Edit Reservation", href: "/dashboard/reservations/edit/${r._id}" },
+  { name: "Add Reservation", href: "/dashboard/reservations/add" },
 ]
 
 export function Header() {
@@ -33,9 +31,27 @@ export function Header() {
   const [relativeTime, setRelativeTime] = useState("")
   const isMobile = useIsMobile()
 
-  // Determine the active nav item's title
-  const activeItem = navItems.find(item => item.href === pathname)
-  const title = activeItem ? activeItem.name : "SITRAVEL"
+  // Determine the active nav item's title with support for dynamic routes
+  const getPageTitle = () => {
+    // Check for exact matches first
+    const exactMatch = navItems.find(item => item.href === pathname)
+    if (exactMatch) return exactMatch.name
+
+    // Check for reservation detail page
+    if (pathname.match(/^\/dashboard\/reservations\/[^\/]+$/)) {
+      return "Reservation Details"
+    }
+    
+    // Check for reservation update page
+    if (pathname.match(/^\/dashboard\/reservations\/[^\/]+\/update$/)) {
+      return "Update Reservation"
+    }
+
+    // Default title
+    return "SITRAVEL"
+  }
+
+  const title = getPageTitle()
 
   // Format the current date
   const formattedDate = new Intl.DateTimeFormat("en-US", {
