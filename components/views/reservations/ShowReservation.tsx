@@ -80,17 +80,7 @@ export default function ShowReservation() {
             <dd className="text-black border border-gray-400 p-1 rounded-lg text-sm font-normal">{reservation.status}</dd>
           </div>
         </dl>
-      </section>
-
-      {/* <ul className="space-y-2">
-        <li><strong>Estimated Budget:</strong> {reservation.estimated_budget}</li>
-        <li><strong>Total Price:</strong> {reservation.total_price}</li>
-        <li><strong>Payment Method:</strong> {reservation.payment_method}</li>
-        <li><strong>Payment Status:</strong> {reservation.payment_status}</li>
-        <li><strong>Status:</strong> {reservation.status}</li>
-        <li><strong>Admin ID:</strong> {reservation.admin_id}</li>
-      </ul> */}
-      
+      </section>  
 
       <div className="flex space-x-2 pt-4">
         <Button

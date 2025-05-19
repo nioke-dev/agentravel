@@ -23,22 +23,6 @@ export async function getReservation(
   return json.data;
 }
 
-// export async function addReservation(
-//   payload: ReservationFormValues
-// ): Promise<ReservationFormValues> {
-//   const res = await fetch(BASE_URL, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload),
-//   });
-//   if (!res.ok) {
-//     const err = await res.json();
-//     throw new Error(err.message || "Failed to add reservation");
-//   }
-//   const json: ApiResponse<ReservationFormValues> = await res.json();
-//   return json.data;
-// }
-
 export async function addReservation(payload: ReservationFormValues): Promise<ReservationFormValues> {
   const res = await fetch("/api/reservasi", {
     method: "POST",
@@ -65,24 +49,6 @@ export async function addReservation(payload: ReservationFormValues): Promise<Re
   const json: ApiResponse<ReservationFormValues> = await res.json();
   return json.data;
 }
-
-
-// export async function updateReservation(
-//   id: string,
-//   payload: Partial<ReservationFormValues>
-// ): Promise<ReservationFormValues> {
-//   const res = await fetch(`${BASE_URL}/${id}`, {
-//     method: "PUT",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload),
-//   });
-//   if (!res.ok) {
-//     const err = await res.json();
-//     throw new Error(err.message || `Failed to update reservation ${id}`);
-//   }
-//   const json: ApiResponse<ReservationFormValues> = await res.json();
-//   return json.data;
-// }
 
 export async function updateReservation(
   id: string,

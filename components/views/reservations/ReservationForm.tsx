@@ -1,4 +1,3 @@
-// src/components/reservation/ReservationForm.tsx
 import React from "react";
 import { FormField } from "@/components/ui/form-field";
 import { SelectField } from "@/components/ui/select-field";

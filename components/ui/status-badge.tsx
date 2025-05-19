@@ -6,6 +6,10 @@ export function getStatusClasses(status: string) {
         return "bg-[#FFC8C5] text-[#c8170d]";
       case "Completed":
         return "bg-[#c0f2cc] text-[#1e7735]";
+      case "Paid":
+        return "bg-[#c0f2cc] text-[#1e7735]";
+      case "Unpaid":
+        return "bg-[#FFC8C5] text-[#c8170d]";
       default:
         return "bg-gray-100 text-gray-600";
     }
