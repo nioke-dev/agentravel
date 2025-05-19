@@ -28,14 +28,12 @@ export interface ApiResponse<T> {
     data: T;
 }
 
-// src/types/reservationType.ts
-
 export type ReservationFilters = {
-  page?: number;         // untuk pagination
-  limit?: number;        // jumlah data per halaman
-  search?: string;       // pencarian berdasarkan nama/NIK/tujuan
-  status?: string;       // filter berdasarkan status reservasi (Booked, Canceled, etc.)
-  payment_status?: string; // (opsional) filter berdasarkan status pembayaran
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+  payment_status?: string;
 };
 
 export interface Options {
