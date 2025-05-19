@@ -19,7 +19,7 @@ const reservasiSchema = new mongoose.Schema(
                              enum: ['Pending', 'Paid'], required: true },
                              
         status           : { type: String, 
-                             enum: ['Booked', 'Completed', 'Cancelled'], required: true },
+                             enum: ['Booked', 'Completed', 'Canceled'], required: true },
 
         admin_id         : { type: String, // type: mongoose.Schema.Types.ObjectId, 
                              /* ref: 'User', */ required: true },

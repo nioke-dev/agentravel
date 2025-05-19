@@ -1,9 +1,7 @@
-// app/dashboard/reservations/page.tsx
 "use client"
 
 import { useState } from "react"
-import { ReservationsTableFlight } from "@/components/reservations/reservations-table-flight"
-import { ReservationsTableHotel } from "@/components/reservations/reservations-table-hotel"
+import ReservationsDataTable from "@/components/views/reservations/ReservationDataTable"
 import { Button } from "@/components/ui/button"
 import { Plane, House } from "lucide-react"
 
@@ -12,7 +10,7 @@ export default function ReservationsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex w-full p-2 mb-4 bg-white rounded-md p-1">
+      <div className="flex w-full mb-4 bg-white rounded-md p-1">
         <Button
           variant="ghost"
           onClick={() => setActiveTab("flight")}
@@ -42,9 +40,9 @@ export default function ReservationsPage() {
 
         {/* Menampilkan komponen berdasarkan tab aktif */}
         {activeTab === "flight" ? (
-          <ReservationsTableFlight />
+          <ReservationsDataTable />
         ) : (
-          <ReservationsTableHotel />
+          <ReservationsDataTable />
         )}
 
         {/* Catatan tentang tab yang dipilih */}

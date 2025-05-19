@@ -30,7 +30,7 @@ const reservasiSchema = new mongoose.Schema(
     total_price      : { type: Number, required: true },
     payment_method   : { type: String, enum: ['Prepaid', 'Postpaid'], required: true },
     payment_status   : { type: String, enum: ['Pending', 'Paid'], required: true },
-    status           : { type: String, enum: ['Booked', 'Completed', 'Cancelled'], required: true },
+    status           : { type: String, enum: ['Booked', 'Completed', 'Canceled'], required: true },
     admin_id         : { type: String, required: true },
   },
   { collection: "reservasi", timestamps: true }
