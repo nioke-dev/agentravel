@@ -6,19 +6,25 @@ import { InvoiceFormValues, Options, Invoice, ReservationReference } from "@/typ
 import { useIsMobile } from "@/components/ui/use-mobile";
 import { ReservationFormValues } from "@/types/reservationType";
 
+const formatDateForSearch = (date?: string | Date) => {
+  if (!date) return "";
+  // Format as 'dd/mm/yyyy' to match your locale
+  return new Date(date).toLocaleDateString("id-ID");
+}
+
 export function useInvoiceForm({ id, initialValues }: Options = {}) {
   const router = useRouter();
   const isEdit = Boolean(id);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [reservations, setReservations] = useState<ReservationFormValues[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [customerNameSearch, setCustomerNameSearch] = useState("");
-  const [dateSearch, setDateSearch] = useState("");
-  const [searchType, setSearchType] = useState<"basic" | "advanced">("basic");
   const [statusFilter, setStatusFilter] = useState<"all" | string>("all");
   const [loading, setLoading] = useState(true);
   const [loadingReservations, setLoadingReservations] = useState(false);
   const isMobile = useIsMobile();
+  
+  // Cache for reservation details to use in search
+  const [reservationCache, setReservationCache] = useState<{[key: string]: ReservationFormValues}>({});
 
   // ==== FETCH INVOICE LIST ====
   useEffect(() => {
@@ -38,7 +44,18 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
     setLoadingReservations(true);
     reservationService
       .listReservations()
-      .then((res) => setReservations(res.data))
+      .then((res) => {
+        setReservations(res.data);
+        
+        // Build reservation cache for search
+        const cache: {[key: string]: ReservationFormValues} = {};
+        res.data.forEach(reservation => {
+          if (reservation._id) {
+            cache[reservation._id] = reservation;
+          }
+        });
+        setReservationCache(cache);
+      })
       .catch((err) => {
         console.error("Error fetching reservations:", err);
         setReservations([]);
@@ -49,36 +66,67 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
   // ==== FILTER & SEARCH MEMOIZED ====
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
+    
+    // If no search query and status filter is "all", return all invoices
+    if (!q && statusFilter === "all") {
+      return invoices;
+    }
+    
     return invoices.filter((inv) => {
-      // Check if reservation exists
-      const reservationTicketId = inv.reservation?.ticket_id 
-        ? String(inv.reservation.ticket_id).toLowerCase() 
-        : '';
+      // Status filter check
+      const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
+      if (!matchesStatus) return false;
       
-      const reservationName = inv.reservation?.name 
-        ? inv.reservation.name.toLowerCase() 
-        : '';
-        
-      const matchesSearch =
-        reservationTicketId.includes(q) ||
-        reservationName.includes(q) ||
-        (inv.payment_date && String(inv.payment_date).toLowerCase().includes(q)) ||
-        inv.status.toLowerCase().includes(q);
+      // If no search query, just apply status filter
+      if (!q) return true;
       
-      // If we have the populated reservation data, also search in that
+      // Get reservation data from either populated field, reference, or cache
+      let reservationData = null;
+      
+      // Try to get from populated field
       if (inv.reservation) {
-        const reservationMatches = 
-          inv.reservation.name.toLowerCase().includes(q) ||
-          inv.reservation.destination.toLowerCase().includes(q) ||
-          String(inv.reservation.ticket_id).toLowerCase().includes(q);
-        
-        if (reservationMatches) return true;
+        reservationData = inv.reservation;
+      } 
+      // Try to get from cache
+      else if (inv.reservation_id && reservationCache[inv.reservation_id]) {
+        reservationData = reservationCache[inv.reservation_id];
       }
       
-      const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      // Check ticket ID
+      let ticketId = '';
+      if (reservationData && reservationData.ticket_id) {
+        ticketId = String(reservationData.ticket_id).toLowerCase();
+      }
+      
+      // Check customer name
+      let customerName = '';
+      if (reservationData && reservationData.name) {
+        customerName = reservationData.name.toLowerCase();
+      }
+      
+      // Check payment date (formatted for locale)
+      const paymentDate = formatDateForSearch(inv.payment_date).toLowerCase();
+      
+      // Check due date
+      const dueDate = formatDateForSearch(inv.due_date).toLowerCase();
+      
+      // Check status
+      const status = inv.status.toLowerCase();
+      
+      // Check total amount
+      const totalAmount = String(inv.total_amount).toLowerCase();
+      
+      // Check if any field matches the search query
+      return (
+        ticketId.includes(q) ||
+        customerName.includes(q) ||
+        paymentDate.includes(q) ||
+        dueDate.includes(q) ||
+        status.includes(q) ||
+        totalAmount.includes(q)
+      );
     });
-  }, [invoices, searchQuery, statusFilter]);
+  }, [invoices, searchQuery, statusFilter, reservationCache]);
 
   // ==== FORM HANDLING ====
   const defaultForm: InvoiceFormValues = {
@@ -133,8 +181,12 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
             ...prev,
             reservation_ref: {
               _id: data.reservation_id,
-              ticket_id: data.reservation!.ticket_id ? data.reservation!.ticket_id.toString() : '',
-              name: data.reservation!.name || ''
+              ticket_id: data.reservation && typeof data.reservation === 'object' && 'ticket_id' in data.reservation 
+                ? String(data.reservation.ticket_id || '') 
+                : '',
+              name: data.reservation && typeof data.reservation === 'object' && 'name' in data.reservation 
+                ? String(data.reservation.name || '') 
+                : ''
             } as ReservationReference
           }));
         } 
@@ -145,7 +197,8 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
       })
       .catch((err) => setError(err.message || "Failed to load invoice"))
       .finally(() => setFetching(false));
-  }, [id, isEdit]);
+  }, [id, isEdit, defaultForm]);
+  
   // Fetch reservation details when reservation_id changes
   const fetchReservationDetails = async (reservationId: string) => {
     if (!reservationId) return;
@@ -164,6 +217,12 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
           ticket_id: reservation.ticket_id ? reservation.ticket_id.toString() : '',
           name: reservation.name || ''
         }
+      }));
+      
+      // Update reservation cache
+      setReservationCache(prev => ({
+        ...prev,
+        [reservationId]: reservation
       }));
     } catch (error: any) {
       console.error("Error fetching reservation details:", error);
