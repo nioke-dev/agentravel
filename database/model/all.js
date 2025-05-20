@@ -73,8 +73,10 @@ const logTransaksiSchema = new mongoose.Schema(
 
 const laporanSchema = new mongoose.Schema(
   {
-    amount    : { type: mongoose.Types.Decimal128, required: true },
-    created_by: { type: String, ref: 'User', required: true },
+    amount      : { type: Number, required: true },
+    type        : { type: String, enum: ['Income', 'Expense'], required: true },
+    description : { type: String, required: true },
+    created_by  : { type: String, ref: 'User', required: true },
   },
   { collection: "laporan", timestamps: true }
 );
