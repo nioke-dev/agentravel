@@ -39,13 +39,13 @@ export default function ShowInvoice() {
                   #{invoice.reservation_ref.ticket_id}
                 </dd>
               </div>
-              {/* <div>
+              <div>
                 <dt className="block text-sm font-medium mb-1">Customer Name</dt>
                 <dd className="text-black border border-gray-400 p-1 rounded-lg text-sm font-normal">
-                  {invoice.reservation.name}
+                  {invoice.reservation_ref.name}
                 </dd>
               </div>
-              <div>
+              {/*<div>
                 <dt className="block text-sm font-medium mb-1">Destination</dt>
                 <dd className="text-black border border-gray-400 p-1 rounded-lg text-sm font-normal">
                   {invoice.reservation.destination}

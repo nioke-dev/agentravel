@@ -194,3 +194,7 @@ export async function createInvoiceFromReservation(
   
   return addInvoice(invoicePayload);
 }
+
+export function downloadInvoice(invoiceId: string, arg1: { responseType: string; }) {
+  throw new Error("Function not implemented.");
+}
