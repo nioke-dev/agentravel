@@ -1,15 +1,10 @@
 import React from "react";
-import { ShowReservation } from "@/components/reservations/ShowReservation";
+import ShowReservation from "@/components/views/reservations/ShowReservation";
 
-interface PageProps {
-  params: { id: string };
-}
-
-export default async function ReservationDetailPage({ params }: PageProps) {
-    const { id } = params;
+export default async function ReservationDetailPage() {
     return (
-        <section className="p-6">
-        <ShowReservation id={id} />
-        </section>
+      <section className="w-full max-w-full px-4 mx-auto">
+        <ShowReservation />
+      </section>
     );
 }

@@ -30,7 +30,7 @@ const reservasiSchema = new mongoose.Schema(
     total_price      : { type: Number, required: true },
     payment_method   : { type: String, enum: ['Prepaid', 'Postpaid'], required: true },
     payment_status   : { type: String, enum: ['Pending', 'Paid'], required: true },
-    status           : { type: String, enum: ['Booked', 'Completed', 'Cancelled'], required: true },
+    status           : { type: String, enum: ['Booked', 'Completed', 'Canceled'], required: true },
     admin_id         : { type: String, required: true },
   },
   { collection: "reservasi", timestamps: true }
@@ -38,7 +38,7 @@ const reservasiSchema = new mongoose.Schema(
 
 const pembayaranSchema = new mongoose.Schema(
   {
-    reservasiId : { type: String /* mongoose.Schema.Types.ObjectId, ref: 'Reservasi' */, required: true },
+    reservasiId : { type: /* String */ mongoose.Schema.Types.ObjectId, ref: 'Reservasi', required: true },
     jumlah      : { type: Number, required: true },
     metode      : { type: String, required: true },
     status      : { type: String, enum: ['pending', 'berhasil', 'gagal'], default: 'pending' },
@@ -49,8 +49,8 @@ const pembayaranSchema = new mongoose.Schema(
 const invoisSchema = new mongoose.Schema(
   {
     reservation_id : { type: String, required: true },
-    total_amount   : { type: mongoose.Types.Decimal128, required: true },
-    fee            : { type: mongoose.Types.Decimal128, required: true },
+    total_amount   : { type: Number/* mongoose.Types.Decimal128 */, required: true },
+    fee            : { type: Number/* mongoose.Types.Decimal128 */, required: true },
     payment_method : { type: String, enum: ['Bank Transfer', 'Credit Card', 'Cash'], required: true },
     payment_date   : { type: Date, required: true },
     issued_date    : { type: Date, required: true },
