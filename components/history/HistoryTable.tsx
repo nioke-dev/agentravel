@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
@@ -97,8 +96,8 @@ export function HistoryTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Type</SelectItem>
-              <SelectItem value="Reservation">Reservation</SelectItem>
-              <SelectItem value="Invoice">Invoice</SelectItem>
+              <SelectItem value="Reservation">Date</SelectItem>
+              <SelectItem value="Invoice">Actor</SelectItem>
             </SelectContent>
           </Select>
         </div>
