@@ -2,9 +2,7 @@ import mongoose from 'mongoose';
 
 const laporanSchema = new mongoose.Schema(
     {
-        amount      : { type: Number, required: true },
-        type        : { type: String, enum: ['Income', 'Expense'], required: true },
-        description : { type: String, required: true },
+        amount      : { type: mongoose.Types.Decimal128, required: true },
         created_by  : { type: String /* mongoose.Schema.Types.ObjectId */, ref: 'User', required: true },
     },
     {

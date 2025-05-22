@@ -30,17 +30,16 @@ export default function ReservationDataTable() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
         <h3 className="text-sm text-gray-500">
           {/* Total Reservasi */}
-          {reservations.length} Reservations
+          {reservations.length} Flight Reservations
         </h3>
         <div className="flex gap-2 items-center">
-          <div className={`relative ${isMobile ? 'w-10 me-3' : ''}`}>
+          <div className="relative">
             <Search className="absolute left-2 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder={isMobile ? "" : "Search ticket, customer, destination.."}
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className={`ps-10 h-10 ${isMobile ? 'w-10 pe-2' : 'w-full'}`}
-              aria-label="Search"
+              <Input
+                placeholder={isMobile ? "" : "Search customer, etc..."}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="pl-10 h-10 w-full"
             />
           </div>
           {/* Filter berdasarkan Status Reservasi */}

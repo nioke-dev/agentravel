@@ -6,12 +6,6 @@ import { InvoiceFormValues, Options, Invoice, ReservationReference } from "@/typ
 import { useIsMobile } from "@/components/ui/use-mobile";
 import { ReservationFormValues } from "@/types/reservationType";
 
-const formatDateForSearch = (date?: string | Date) => {
-  if (!date) return "";
-  // Format as 'dd/mm/yyyy' to match your locale
-  return new Date(date).toLocaleDateString("id-ID");
-}
-
 export function useInvoiceForm({ id, initialValues }: Options = {}) {
   const router = useRouter();
   const isEdit = Boolean(id);
@@ -56,27 +50,32 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return invoices.filter((inv) => {
-      // ticket id & raw reservation fields
-      const reservationTicketId = inv.reservation?.ticket_id
-        ? String(inv.reservation.ticket_id).toLowerCase()
-        : "";
-      const reservationName = inv.reservation?.name
-        ? inv.reservation.name.toLowerCase()
-        : "";
-
-      // formatted payment date
-      const paymentDateFormatted = formatDateForSearch(inv.payment_date).toLowerCase();
-
-      // global match across ticket, name, payment date, status
+      // Check if reservation exists
+      const reservationTicketId = inv.reservation?.ticket_id 
+        ? String(inv.reservation.ticket_id).toLowerCase() 
+        : '';
+      
+      const reservationName = inv.reservation?.name 
+        ? inv.reservation.name.toLowerCase() 
+        : '';
+        
       const matchesSearch =
         reservationTicketId.includes(q) ||
         reservationName.includes(q) ||
-        paymentDateFormatted.includes(q) ||
+        (inv.payment_date && String(inv.payment_date).toLowerCase().includes(q)) ||
         inv.status.toLowerCase().includes(q);
-
-      // status‐only filter
+      
+      // If we have the populated reservation data, also search in that
+      if (inv.reservation) {
+        const reservationMatches = 
+          inv.reservation.name.toLowerCase().includes(q) ||
+          inv.reservation.destination.toLowerCase().includes(q) ||
+          String(inv.reservation.ticket_id).toLowerCase().includes(q);
+        
+        if (reservationMatches) return true;
+      }
+      
       const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
-
       return matchesSearch && matchesStatus;
     });
   }, [invoices, searchQuery, statusFilter]);
