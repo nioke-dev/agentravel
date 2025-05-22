@@ -42,6 +42,7 @@ export function useReportForm(type: "Income" | "Expense") {
 
   return {
     loading,
+    reports,
     searchQuery,
     setSearchQuery,
     amountRange,
