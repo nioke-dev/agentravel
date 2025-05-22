@@ -27,6 +27,16 @@ export function Sidebar() {
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
 
+  const isActiveRoute = (href: string) => {
+    if (href === "/dashboard") {
+      return pathname === href
+    }
+    
+    // For other routes, check if pathname starts with the href
+    // This ensures sub-routes like /dashboard/reservations/add still highlight the Reservations nav item
+    return pathname.startsWith(href)
+  }
+
   const SidebarContent = () => (
     <div className="w-full h-full flex flex-col bg-[#377dec] text-white">
       <div className="p-4 mt-3 mb-5 flex items-center justify-center gap-3">
@@ -37,10 +47,7 @@ export function Sidebar() {
       <nav className="flex-1 p-2 overflow-y-auto flex flex-col items-center">
         <ul className="flex flex-col space-y-2 w-full max-w-[200px]">
           {navItems.map((item) => {
-            // const isActive = pathname === item.href
-            const isExactDashboard = item.href === "/dashboard" && pathname === "/dashboard"
-            const isReservations = item.href === "/dashboard/reservations" && pathname.startsWith(item.href)
-            const isActive = isExactDashboard || isReservations
+            const isActive = pathname === item.href
             const Icon = item.icon
 
             return (
@@ -48,7 +55,7 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   className={`flex items-center text-bold gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive ? "bg-white text-[#377dec]" : "hover:bg-white/10"
+                    isActive ? "bg-white text-[#377dec] font-bold" : "hover:bg-white/10"
                   }`}
                 >
                   <Icon size={18} />

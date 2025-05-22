@@ -86,29 +86,6 @@ export function useReservationForm({ id, initialValues }: Options = {}) {
       .finally(() => setFetching(false));
   }, [id, isEdit]);
 
-  // const submit = async () => {
-  //   setLoading(true);
-  //   setError(null);
-  //   try {
-  //     const payload = {
-  //       ...form,
-  //       date: new Date(form.date),
-  //     };
-
-  //     if (isEdit && id) {
-  //       await service.updateReservation(id, payload);
-  //     } else {
-  //       await service.addReservation(payload);
-  //     }
-
-  //     router.push("/dashboard/reservations");
-  //   } catch (err: any) {
-  //     setError(err.message || "Submission failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const submit = async () => {
     setLoading(true);
     setError(null);
@@ -133,7 +110,6 @@ export function useReservationForm({ id, initialValues }: Options = {}) {
     }
   };
   
-
   return {
     filtered,
     form,
