@@ -13,6 +13,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -23,18 +24,35 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const params = new URLSearchParams({ username, password });
-      const res = await fetch(`/api/pengguna?${params.toString()}`);
+      // const params = new URLSearchParams({ username, password });
+      // console.log(JSON.stringify({
+      //   username: username,
+      //   password: password
+      // }))
+      const res = await fetch(
+        // `http://${process.env.NEXT_PUBLIC_API_URL}/api/signin`, {
+        `http://70.153.16.116:3000/api/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      });
       const data = await res.json();
 
       console.log('Login response:', data);
-      if (!res.ok || !data.data || data.data.length === 0) {
+      if (!res.ok || !data.username || !data.token) {
+        setErrorMessage("Username atau password tidak valid.");
         toast({
           variant: "destructive",
           title: "Login gagal. Cek kembali username dan password."
         });
       } else {
         toast({ title: "Login berhasil" });
+        
         // Attempt navigation
         try {
           await router.push('/dashboard');
@@ -96,11 +114,23 @@ export function LoginForm() {
               </button>
             </div>
           </div>
-
+          {errorMessage && (
+            <div className="bg-red-100 text-red-700 px-4 py-2 rounded-md relative text-sm">
+              {errorMessage}
+              <button
+                onClick={() => setErrorMessage(null)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-red-700 hover:text-red-900"
+                type="button"
+              >
+                &times;
+              </button>
+            </div>
+          )}
           <Button
             type="submit"
             className={`w-full rounded-full text-white ${isFormValid ? 'bg-[#377dec] hover:bg-[#4a8ef0]' : 'bg-gray-700 cursor-not-allowed'}`}
             disabled={loading || !isFormValid}
+            onClick={() => setErrorMessage(null)}
           >
             {loading ? 'Logging in...' : 'Log In'}
           </Button>
