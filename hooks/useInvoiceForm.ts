@@ -20,6 +20,9 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
   const [loadingReservations, setLoadingReservations] = useState(false);
   const isMobile = useIsMobile();
 
+  // State to store reservation details for search in InvoiceDataTable
+  const [reservationDetails, setReservationDetails] = useState<{[key: string]: ReservationFormValues}>({});
+
   // ==== FETCH INVOICE LIST ====
   useEffect(() => {
     setLoading(true);
@@ -68,17 +71,24 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
       // If we have the populated reservation data, also search in that
       if (inv.reservation) {
         const reservationMatches = 
-          inv.reservation.name.toLowerCase().includes(q) ||
-          inv.reservation.destination.toLowerCase().includes(q) ||
+          inv.reservation?.name.toLowerCase().includes(q) ||
+          inv.reservation?.destination.toLowerCase().includes(q) ||
           String(inv.reservation.ticket_id).toLowerCase().includes(q);
         
         if (reservationMatches) return true;
       }
       
+      // Also check if reservation name in reservationDetails state matches search query
+      // This is to cover populated reservation from the InvoiceDataTable fetch
+      if (inv.reservation_id && reservationDetails[inv.reservation_id]) {
+        const resName = reservationDetails[inv.reservation_id].name.toLowerCase();
+        if (resName.includes(q)) return true;
+      }
+      
       const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
-  }, [invoices, searchQuery, statusFilter]);
+  }, [invoices, searchQuery, statusFilter, reservationDetails]);
 
   // ==== FORM HANDLING ====
   const defaultForm: InvoiceFormValues = {
@@ -133,10 +143,12 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
             ...prev,
             reservation_ref: {
               _id: data.reservation_id,
-              ticket_id: data.reservation!.ticket_id ? data.reservation!.ticket_id.toString() : '',
-              name: data.reservation!.name || ''
-            } as ReservationReference
-          }));
+              ticket_id: data.reservation!.ticket_id?.toString() ?? '',
+              name: data.reservation!.name || '',
+              destination: data.reservation!.destination,
+              contact: data.reservation!.contact,
+              }
+            }));
         } 
         // Otherwise fetch the reservation data
         else if (data.reservation_id) {
@@ -161,8 +173,10 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
         reservation_id: reservationId,
         reservation_ref: {
           _id: reservationId,
-          ticket_id: reservation.ticket_id ? reservation.ticket_id.toString() : '',
-          name: reservation.name || ''
+          ticket_id: reservation.ticket_id?.toString() ?? '',
+          name: reservation.name,
+          destination: reservation.destination,
+          contact: reservation.contact,
         }
       }));
     } catch (error: any) {
@@ -259,6 +273,8 @@ export function useInvoiceForm({ id, initialValues }: Options = {}) {
     selectedReservation,
     handleReservationChange,
     fetchReservationDetails,
-    refreshData
+    refreshData,
+    reservationDetails, // added to expose reservationDetails state for search in useMemo
+    setReservationDetails // added setter to update reservationDetails from component
   };
 }
