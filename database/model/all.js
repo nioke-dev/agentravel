@@ -62,11 +62,11 @@ const invoisSchema = new mongoose.Schema(
 
 const logTransaksiSchema = new mongoose.Schema(
   {
-    reference_id  : { type: Number, required: true },
-    reference_type: { type: String, enum: ['reservation', 'invoice'], required: true },
-    action        : { type: String, required: true },
-    action_date   : { type: Date, required: true },
-    performed_by  : { type: String, required: true },
+    reference_id    : { type: Number, required: true },
+    reference_type  : { type: String, enum: ['Reservation', 'Invoice'], required: true },
+    date            : { type: Date, required: true },
+    description     : { type: String, required: true },
+    actor           : { type: String, enum: ['Finance Admin', 'Travel Admin'], required: true },
   },
   { collection: "log-transaksi", timestamps: true }
 );
