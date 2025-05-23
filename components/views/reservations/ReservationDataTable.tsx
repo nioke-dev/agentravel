@@ -90,6 +90,12 @@ export default function ReservationDataTable() {
                   Please wait, loading...
                 </td>
               </tr>
+            ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-4 py-2 text-center">
+                    Reservation data not found
+                  </td>
+                </tr>
             ) : (
               filtered.map((resv) => (
                 <tr key={resv._id} className="hover:bg-gray-50 ">
