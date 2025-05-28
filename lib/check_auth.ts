@@ -4,8 +4,6 @@ import { encrypt, decrypt } from "@/lib/auth";
 import { tokenPayload } from '@/types/payloadType';
 import { MiddlewareHandler } from "hono";
 
-
-
 const check_auth: MiddlewareHandler = async (c, next) => {
     const cookie = await cookies();
 

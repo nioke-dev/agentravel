@@ -7,6 +7,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { useIsMobile } from "@/hooks/use-mobile"
 import { CalendarDays } from "lucide-react";
 import { useUser } from '@/app/context/UserContext';
+import { capitalizeWord } from "@/lib/capitalize";
 
 type DashboardData = {
     totalReservations: number;
@@ -71,7 +72,7 @@ export function DashboardContent({ dashboardData } : { dashboardData: DashboardD
     <main className="bg-gray-100 min-h-screen space-y-5">
       {/* Greeting Banner (no card) */}
       <div>
-        <h1 className="text-xl font-semibold mb-2">Hello! Good morning { user.username || 'Musfiq'}</h1>
+        <h1 className="text-xl font-semibold mb-2">Hello! Good morning, { capitalizeWord(user?.username) || 'Musfiq'}</h1>
         <p className="text-sm text-gray-500/70 mb-6">Great service starts with great management. Keep up the good work!</p>
       </div>
 

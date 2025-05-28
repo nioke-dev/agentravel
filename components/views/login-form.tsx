@@ -35,6 +35,7 @@ export function LoginForm() {
         })
       });
       const authDetail = await signingIn.json();
+      console.log(authDetail);
       /*
       const checkToken = await fetch('/api/pengguna/afterSignIn', {
         method: 'POST',

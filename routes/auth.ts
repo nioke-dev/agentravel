@@ -11,13 +11,33 @@ autentikasi
     .post('signin', async (c) => {
         try {
             const { username, password } = await c.req.json() as { username: string, password: string };
+            if (!username || !password) {
+                return c.json({
+                    ok: false,
+                    loggedIn: false,
+                    message: "Username dan password harus diisi",
+                });
+            }
+
             const pengguna = await Pengguna.find({ username: username.toLowerCase() });
-            const hashedPassword = await bcrypt.hash(password, 10);
+            if (pengguna.length === 0) {
+                return c.json({
+                    ok: false,
+                    loggedIn: false,
+                    // usernameInput: username.toLowerCase(),
+                    message: "Username dan password tidak valid",
+                });
+            }
             
-            const isMatch = await bcrypt.compare(password, hashedPassword);
+            const isMatch = await bcrypt.compare(password, pengguna[0].password);
+            console.log("isMatchCek: ", isMatch);
             if (!isMatch) {
                 return c.json({
                     ok: false,
+                    loggedIn: false,
+                    // usernameInput: username.toLowerCase(),
+                    // password: password,
+                    // pengguna: pengguna[0],
                     message: "Username dan password tidak valid",
                 });
             }
@@ -81,9 +101,12 @@ autentikasi
         })
     })
     .get('signout', async (c) => {
-        c.header("Set-Cookie", `token=; HttpOnly; Path=/; Secure; Max-Age=0`);
+        // c.header("Set-Cookie", `token=; HttpOnly; Path=/; Secure; Max-Age=0`);
+        (await cookies()).delete("token")
+
         return c.json({
             ok: true,
+            loggedIn: false,
             message: "Logout berhasil"
         })
     })
