@@ -24,14 +24,7 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      // const params = new URLSearchParams({ username, password });
-      // console.log(JSON.stringify({
-      //   username: username,
-      //   password: password
-      // }))
-      const res = await fetch(
-        // `http://${process.env.NEXT_PUBLIC_API_URL}/api/signin`, {
-        `http://70.153.16.116:3000/api/signin`, {
+      const signingIn = await fetch( `/api/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -41,21 +34,26 @@ export function LoginForm() {
           password: password
         })
       });
-      const data = await res.json();
-
-      console.log('Login response:', data);
-      if (!res.ok || !data.username || !data.token) {
-        setErrorMessage("Username atau password tidak valid.");
+      const authDetail = await signingIn.json();
+      /*
+      const checkToken = await fetch('/api/pengguna/afterSignIn', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      const authenticatedUser = await checkToken.json();
+      console.log(authenticatedUser)
+      */
+      if (!authDetail.loggedIn) {
+        setErrorMessage(`Username atau password tidak valid.`);
         toast({
           variant: "destructive",
           title: "Login gagal. Cek kembali username dan password."
         });
       } else {
         toast({ title: "Login berhasil" });
-        
         // Attempt navigation
         try {
-          await router.push('/dashboard');
+          router.push('/dashboard');
         } catch (navErr) {
           console.warn('router.push failed, falling back to window.location', navErr);
           window.location.href = '/dashboard';

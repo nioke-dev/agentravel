@@ -24,8 +24,14 @@ const navItems = [
   { name: "Settings", href: "/dashboard/settings" },
   { name: "Add Reservation", href: "/dashboard/reservations/add" },
 ]
-
-export function Header() {
+type userData = {
+    id: string;
+    username: string;
+    email: string;
+    role: string;
+    exp: number;
+} | null;
+export function Header({ data } : { data: userData }) {
   const pathname = usePathname()
   const [date] = useState(() => new Date())
   const [relativeTime, setRelativeTime] = useState("")
@@ -54,7 +60,7 @@ export function Header() {
   const title = getPageTitle()
 
   // Format the current date
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
+  const formattedDate = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -97,7 +103,7 @@ export function Header() {
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-[#377dec] text-white">ST</AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium hidden md:inline">Admin</span>
+            <span className="text-sm font-medium hidden md:inline">{ data?.username }</span>
             <ChevronDown size={16} className="text-[#888888] hidden md:inline" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
