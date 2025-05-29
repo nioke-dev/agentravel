@@ -68,7 +68,23 @@ export function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-[#5a93e8]">
-        <button className="flex items-center gap-3 px-3 py-2 w-full rounded-md hover:bg-white/10 transition-colors">
+        <button className="flex items-center gap-3 px-3 py-2 w-full rounded-md hover:bg-white/10 transition-colors"
+          onClick={() => {
+            // Handle logout logic here
+            fetch('/api/logout', {
+              method: 'GET',
+              credentials: 'include',
+            })
+            .then(res => res.json())
+            .then((res) => {
+              if (!res.loggedIn) {
+                window.location.href = '/' // Redirect to home after logout
+              } else {
+                console.error("Logout failed:", res.message)
+              }
+            })
+          }}
+        >
           <LogOut size={18} />
           <span>Logout</span>
         </button>

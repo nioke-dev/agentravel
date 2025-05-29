@@ -1,7 +1,7 @@
 // app/dashboard/reservations/page.tsx
 "use client"
 
-import { HistoryTable } from "@/components/history/HistoryTable"
+import { HistoryTable } from "@/components/views/history/HistoryTable"
 
 export default function ReservationsPage() {
   return (

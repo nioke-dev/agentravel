@@ -6,8 +6,19 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { CalendarDays } from "lucide-react";
+import { useUser } from '@/app/context/UserContext';
+import { capitalizeWord } from "@/lib/capitalize";
 
-const data = [
+type DashboardData = {
+    totalReservations: number;
+    pendingReservations: number;
+    unpaidInvoices: number;
+    monthlyRevenue: number;
+    monthlySales: any[];
+    latestInvoices: any[];
+};
+
+let data = [
   { name: "Apr", value: 20 },
   { name: "May", value: 120 },
   { name: "Jun", value: 280 },
@@ -19,48 +30,39 @@ const data = [
   { name: "Dec", value: 500 },
 ]
 
-export function DashboardContent() {
+export function DashboardContent({ dashboardData } : { dashboardData: DashboardData }) {
+  const user = useUser();
   const isMobile = useIsMobile()
-
+  
+  let dataSales = [];
+  dataSales = dashboardData.monthlySales.map((item) => ({
+    name: item.monthName,
+    value: item.totalSales,
+  }))
   // 🚀 Fetch live reservation count
   const [totalReservations, setTotalReservations] = useState(0);
-  useEffect(() => {
-    async function fetchCount() {
-      try {
-        const res = await fetch("/api/reservasi");
-        const json = await res.json();
-        if (json.status === "berhasil" && Array.isArray(json.data)) {
-          setTotalReservations(json.data.length);
-        }
-      } catch (err) {
-        console.error("Failed to load reservation count", err);
-      }
-    }
-    fetchCount();
-  }, []);
-
   const metrics = [
     {
       title: "Total Reservations",
-      value: totalReservations.toString(),
+      value: dashboardData.totalReservations.toString(),
       icon: "calendar",
       color: "blue",
     },
     {
       title: "Ongoing Reservations",
-      value: "6",
+      value: dashboardData.pendingReservations.toString(),
       icon: "users",
       color: "blue",
     },
     {
       title: "Unpaid Invoices",
-      value: "6",
+      value: dashboardData.unpaidInvoices.toString(),
       icon: "file-text",
       color: "blue",
     },
     {
       title: "Revenue This Month",
-      value: "Rp. 200 K",
+      value: dashboardData.monthlyRevenue.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }),
       icon: "dollar-sign",
       color: "blue",
     },
@@ -70,7 +72,7 @@ export function DashboardContent() {
     <main className="bg-gray-100 min-h-screen space-y-5">
       {/* Greeting Banner (no card) */}
       <div>
-        <h1 className="text-xl font-semibold mb-2">Hello! Good morning Musfiq</h1>
+        <h1 className="text-xl font-semibold mb-2">Hello! Good morning, { capitalizeWord(user?.username) || 'Musfiq'}</h1>
         <p className="text-sm text-gray-500/70 mb-6">Great service starts with great management. Keep up the good work!</p>
       </div>
 
