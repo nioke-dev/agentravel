@@ -76,6 +76,7 @@ const laporanSchema = new mongoose.Schema(
     amount      : { type: Number, required: true },
     type        : { type: String, enum: ['Income', 'Expense'], required: true },
     description : { type: String, required: true },
+    invoice_ref : { type: mongoose.Schema.Types.ObjectId, ref: 'invois' },
     created_by  : { type: String, ref: 'User', required: true },
   },
   { collection: "laporan", timestamps: true }
