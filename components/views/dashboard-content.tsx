@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Ticket, ReceiptText, CircleDollarSign } from "lucide-react";
 // import { useUser } from '@/app/context/UserContext';
 import { capitalizeWord } from "@/lib/capitalize";
 import { DashboardData } from "@/types/dashboardData";
@@ -44,26 +44,22 @@ export function DashboardContent(
     {
       title: "Total Reservations",
       value: dashboardData.totalReservations.toString(),
-      icon: "calendar",
-      color: "blue",
+      icon: <CalendarDays className="text-white"/>,
     },
     {
       title: "Ongoing Reservations",
       value: dashboardData.pendingReservations.toString(),
-      icon: "users",
-      color: "blue",
+      icon: <Ticket className="text-white"/>,
     },
     {
       title: "Unpaid Invoices",
       value: dashboardData.unpaidInvoices.toString(),
-      icon: "file-text",
-      color: "blue",
+      icon: <ReceiptText className="text-white"/>,
     },
     {
       title: "Revenue This Month",
       value: dashboardData.monthlyRevenue.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }),
-      icon: "dollar-sign",
-      color: "blue",
+      icon: <CircleDollarSign className="text-white"/>,
     },
   ]
   // console.log("User data: ", user);
@@ -86,9 +82,7 @@ export function DashboardContent(
                 <p className="text-2xl font-bold text-gray-900">{m.value}</p>
               </div>
               {/* Placeholder for icon; replace with actual icon component */}
-              <div className={`p-2 rounded-lg bg-[#377dec]`}>
-              <CalendarDays className="text-white"/>
-              </div>
+              <div className={`p-2 rounded-lg bg-[#377dec]`}>{m.icon}</div>
             </CardContent>
           </Card>
         ))}
