@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { User as UserType } from "@/types/userType";
+// import { useUser } from "@/app/context/UserContext"
 
 // Using the same navItems from sidebar.tsx but with proper route patterns
 const navItems = [
@@ -24,19 +26,20 @@ const navItems = [
   { name: "Settings", href: "/dashboard/settings" },
   { name: "Add Reservation", href: "/dashboard/reservations/add" },
 ]
-type userData = {
-    id: string;
-    username: string;
-    email: string;
-    role: string;
-    exp: number;
-} | null;
-export function Header({ data } : { data: userData }) {
+// type userData = {
+//     id: string;
+//     username: string;
+//     email: string;
+//     role: string;
+//     exp: number;
+// } | null;
+export function Header({user} : { user: UserType }) {
   const pathname = usePathname()
   const [date] = useState(() => new Date())
   const [relativeTime, setRelativeTime] = useState("")
   const isMobile = useIsMobile()
-
+  // const user = useUser()
+  // localStorage.setItem("user", JSON.stringify(user)) // Store user data in localStorage for debugging
   // Determine the active nav item's title with support for dynamic routes
   const getPageTitle = () => {
     // Check for exact matches first
@@ -79,6 +82,7 @@ export function Header({ data } : { data: userData }) {
     const interval = setInterval(updateRelative, 60_000)
     return () => clearInterval(interval)
   }, [date])
+  // console.log("User data: ", user);
 
   return (
     <header className="h-20 border-b border-[#e7e7e7] bg-white flex items-center justify-between px-4 md:px-6">
@@ -103,7 +107,7 @@ export function Header({ data } : { data: userData }) {
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-[#377dec] text-white">ST</AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium hidden md:inline">{ data?.username }</span>
+            <span className="text-sm font-medium hidden md:inline">{ user?.username }</span>
             <ChevronDown size={16} className="text-[#888888] hidden md:inline" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

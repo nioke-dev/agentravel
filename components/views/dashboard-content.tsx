@@ -6,41 +6,40 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { CalendarDays } from "lucide-react";
-import { useUser } from '@/app/context/UserContext';
+// import { useUser } from '@/app/context/UserContext';
 import { capitalizeWord } from "@/lib/capitalize";
-
-type DashboardData = {
-    totalReservations: number;
-    pendingReservations: number;
-    unpaidInvoices: number;
-    monthlyRevenue: number;
-    monthlySales: any[];
-    latestInvoices: any[];
-};
+import { DashboardData } from "@/types/dashboardData";
+import { User } from "@/types/userType";
 
 let data = [
-  { name: "Apr", value: 20 },
-  { name: "May", value: 120 },
-  { name: "Jun", value: 280 },
-  { name: "Jul", value: 240 },
-  { name: "Aug", value: 480 },
-  { name: "Sep", value: 360 },
+  // { name: "Apr", value: 20 },
+  // { name: "May", value: 120 },
+  // { name: "Jun", value: 280 },
+  // { name: "Jul", value: 240 },
+  // { name: "Aug", value: 480 },
+  // { name: "Sep", value: 360 },
   { name: "Oct", value: 420 },
   { name: "Nov", value: 300 },
   { name: "Dec", value: 500 },
 ]
 
-export function DashboardContent({ dashboardData } : { dashboardData: DashboardData }) {
-  const user = useUser();
-  const isMobile = useIsMobile()
-  
+export function DashboardContent(
+  { dashboardData, user } : 
+  { dashboardData: DashboardData, user: { id: string; username: string; email: string;} } // Replace 'any' with the actual type of user if available
+) {
+  // const user = useUser();
+  const isMobile = useIsMobile();
+  // console.log(dashboardData);
+  new Promise((resolve) => setTimeout(resolve, 3000));
   let dataSales = [];
-  dataSales = dashboardData.monthlySales.map((item) => ({
+  dataSales = dashboardData.monthlyReservations.map((item) => ({
     name: item.monthName,
-    value: item.totalSales,
+    value: item.totalReservations,
   }))
+  data = dataSales;
+  // console.log(dataSales)
   // 🚀 Fetch live reservation count
-  const [totalReservations, setTotalReservations] = useState(0);
+  // const [totalReservations, setTotalReservations] = useState(0);
   const metrics = [
     {
       title: "Total Reservations",
@@ -67,6 +66,7 @@ export function DashboardContent({ dashboardData } : { dashboardData: DashboardD
       color: "blue",
     },
   ]
+  // console.log("User data: ", user);
 
   return (
     <main className="bg-gray-100 min-h-screen space-y-5">
@@ -147,46 +147,33 @@ export function DashboardContent({ dashboardData } : { dashboardData: DashboardD
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      <tr>
+                      {/* <tr>
                         <td className="px-4 py-3 text-sm text-gray-800">Satria Abrar</td>
                         <td className="px-4 py-3 text-sm text-gray-800">Bali</td>
                         <td className="px-4 py-3 text-sm text-gray-800">Rp. 250.000</td>
                         <td className="px-4 py-3">
                           <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Booked</span>
                         </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-gray-800">Muhammad Paksi</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Jogja</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Rp. 100.000</td>
-                        <td className="px-4 py-3">
-                          <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Booked</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-gray-800">Elis Nurhidayati</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Bandung</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Rp. 150.000</td>
-                        <td className="px-4 py-3">
-                          <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Booked</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-gray-800">Abima Fadhrico</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Probolinggo</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Rp. 50.000</td>
-                        <td className="px-4 py-3">
-                          <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Canceled</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-gray-800">Bagus Arnovario</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Jakarta</td>
-                        <td className="px-4 py-3 text-sm text-gray-800">Rp. 200.000</td>
-                        <td className="px-4 py-3">
-                          <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Completed</span>
-                        </td>
-                      </tr>
+                      </tr> */}
+                      { dashboardData.latestReservations.map(( reservation, index ) => (
+                        <tr key={ index }>
+                          <td className="px-4 py-3 text-sm text-gray-800">{ reservation.name }</td>
+                          <td className="px-4 py-3 text-sm text-gray-800">{ reservation.destination }</td>
+                          <td className="px-4 py-3 text-sm text-gray-800">Rp. { reservation.total_price.toLocaleString("id-ID") || 0 }</td>
+                          <td className="px-4 py-3">
+                            <span className={`
+                              inline-block px-2 py-1 text-xs font-medium rounded-full
+                              ${
+                                reservation.status === "Booked" ? "bg-yellow-100 text-yellow-800" :
+                                reservation.status === "Completed" ? "bg-green-100 text-green-800" :
+                                "bg-red-100 text-red-800"
+                              }
+                            `}>
+                              {reservation.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </CardContent>

@@ -35,7 +35,7 @@ export function LoginForm() {
         })
       });
       const authDetail = await signingIn.json();
-      console.log(authDetail);
+      // console.log(authDetail);
       /*
       const checkToken = await fetch('/api/pengguna/afterSignIn', {
         method: 'POST',
@@ -54,7 +54,7 @@ export function LoginForm() {
         toast({ title: "Login berhasil" });
         // Attempt navigation
         try {
-          router.push('/dashboard');
+          router.replace('/dashboard');
         } catch (navErr) {
           console.warn('router.push failed, falling back to window.location', navErr);
           window.location.href = '/dashboard';
