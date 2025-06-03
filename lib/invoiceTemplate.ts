@@ -45,22 +45,22 @@ export function generateInvoiceHtml(data: InvoiceFormValues): string {
     <html>
     <head>
         <style>
-          body { font-family: sans-serif; margin:0; padding:0; font-size:9px; }
-          .container { padding:10px; }
-          .header { text-align:center; margin-bottom:10px; }
-          .header h1 { margin:10px; font-size:18px; }
-          .company { position:absolute; top:10px; right:10px; text-align:right; }
-          .company p { margin:2px 0; font-size:9px; }
-          .info { margin-bottom:8px; font-size:9px; }
-          .info p { margin:2px 0; }
-          table { width:100%; border-collapse: collapse; margin-bottom:8px; font-size:9px; }
-          th, td { border:1px solid #000; padding:4px; }
-          th { background:#ddd; }
-          .total-row td { border:none; }
-          .total { text-align:right; font-weight:bold; font-size:11px; }
-          .terbilang { margin-top:4px; font-size:9px; }
-          .footer { margin-top:10px; font-size:9px; }
-          .signature { float:right; text-align:center; margin-top:20px; font-size:9px; }
+            body { font-family: sans-serif; margin:0; padding:0; font-size:9px; }
+            .container { padding:10px; }
+            .header { text-align:center; margin-bottom:10px; }
+            .header h1 { margin:10px; font-size:18px; }
+            .company { position:absolute; top:10px; right:10px; text-align:right; }
+            .company p { margin:2px 0; font-size:9px; }
+            .info { margin-bottom:8px; font-size:9px; }
+            .info p { margin:2px 0; }
+            table { width:100%; border-collapse: collapse; margin-bottom:8px; font-size:9px; }
+            th, td { border:1px solid #000; padding:4px; }
+            th { background:#ddd; }
+            .total-row td { border:none; }
+            .total { text-align:right; font-weight:bold; font-size:11px; }
+            .terbilang { margin-top:4px; font-size:9px; }
+            .footer { margin-top:10px; font-size:9px; }
+            .signature { float:right; text-align:center; margin-top:20px; font-size:9px; }
         </style>
     </head>
     <body>

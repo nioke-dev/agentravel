@@ -1,7 +1,7 @@
 import { Hono, Context } from 'hono';
 import { Pengguna } from '@/database/model/all';
 import { cookies } from 'next/headers'
-import { check_auth } from '@/lib/check_auth';
+import { check_auth } from '@/routes/middleware/check_auth';
 import { tokenPayload } from '@/types/payloadType';
 import bcrypt from 'bcryptjs';
 

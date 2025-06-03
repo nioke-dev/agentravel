@@ -2,7 +2,7 @@ import 'server-only'
 import { cookies } from 'next/headers'
 import { Hono } from "hono";
 import Pengguna from "@/database/model/pengguna";
-import { encrypt, decrypt } from "@/lib/auth";
+import { encrypt, decrypt } from "@/routes/utils/auth";
 import bcrypt from 'bcryptjs';
 
 const autentikasi = new Hono();
@@ -52,6 +52,27 @@ autentikasi
             const token = await encrypt(payload);
             const cookie = await cookies();
 
+            cookie.set('id', payload?.id || '', {
+                httpOnly: false,
+                secure: false,
+                expires: new Date(Date.now() + 3 /* 3 days */ * 24 * 60 * 60 * 1000),
+                sameSite: 'lax',
+                path: '/',
+            })
+            cookie.set('username', payload?.username || '', {
+                httpOnly: false,
+                secure: false,
+                expires: new Date(Date.now() + 3 /* 3 days */ * 24 * 60 * 60 * 1000),
+                sameSite: 'lax',
+                path: '/',
+            })
+            cookie.set('email', payload?.email || '', {
+                httpOnly: false,
+                secure: false,
+                expires: new Date(Date.now() + 3 /* 3 days */ * 24 * 60 * 60 * 1000),
+                sameSite: 'lax',
+                path: '/',
+            })
             cookie.set('token', token, {
                 httpOnly: true,
                 secure: false,

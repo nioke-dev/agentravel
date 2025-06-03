@@ -8,11 +8,39 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Kelas baru untuk skeleton dengan glassmorphism berkedip */
+  .blinking-glass-skeleton {
+    /*StyleGlassmorphismDasar*//*Warnadasarinibisadianggapsebagaifallbackatautransisiawal*/background: rgba(255, 255, 255, 0.1);
+    /*Untuklightmode,sedikittransparan*/backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    
+    /*Bayanganlembut*//*AnimasiBerkedip*/animation: blink-glass-background 4s infinite alternate, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    -webkit-animation: blink-glass-background 4s infinite alternate;
+}
+
+  /* Penyesuaian untuk dark mode jika diperlukan untuk base style (animasi akan tetap sama kecuali diubah) */
+  .dark .blinking-glass-skeleton {
+    background: rgba(30, 30, 30, 0.1); /* Warna dasar gelap, sedikit transparan */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Keyframes untuk animasi latar belakang berkedip */
+@keyframes blink-glass-background {
+  0% {
+    /* Warna pertama (misal: biru muda keunguan transparan) */
+    background-color: #e5eaf0; /* Opasitas sedikit lebih tinggi untuk visibilitas */
+  }
+  100% {
+    /* Warna kedua (misal: pink muda kemerahan transparan) */
+    background-color: #eff6ff; /* Opasitas sedikit lebih tinggi untuk visibilitas */
+  }
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: #888888;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -32,8 +60,8 @@ body {
     --border: 220 13% 91%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
+    --chart-1: #377dec;
+    --chart-2: #8098c0;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
