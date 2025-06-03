@@ -52,7 +52,7 @@ dashboard
 
             // Set tanggal mulai ke awal bulan 9 bulan yang lalu
             // Contoh: Jika sekarang Mei 2025, akan dimulai dari September 2024 (9 bulan lalu)
-            const nineMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 8, 1); // Mengurangi 8 karena ingin 9 bulan (current month + 8 bulan sebelumnya)
+            const nineMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 5, 1); // Mengurangi 8 karena ingin 9 bulan (current month + 8 bulan sebelumnya)
             nineMonthsAgo.setHours(0, 0, 0, 0); // Atur ke awal hari
             let monthlyReservations = await Reservasi.aggregate([
               {
@@ -112,8 +112,8 @@ dashboard
               });
           
               const result = [];
-              for (let i = 0; i < 9; i++) {
-                const date = new Date(today.getFullYear(), today.getMonth() - (8 - i), 1);
+              for (let i = 0; i < 6; i++) {
+                const date = new Date(today.getFullYear(), today.getMonth() - (5 - i), 1);
                 const year = date.getFullYear();
                 const month = date.getMonth() + 1; // getMonth() is 0-indexed
                 const monthName = new Date(year, month - 1).toLocaleString('id-ID', { month: 'short' });
