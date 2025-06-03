@@ -24,7 +24,6 @@ export function Sidebar() {
     { name: "Invoices", href: "/dashboard/invoices", icon: FileText },
     { name: "History", href: "/dashboard/history", icon: History },
     { name: "Reports", href: "/dashboard/reports", icon: BarChart3 },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
 
   const isActiveRoute = (href: string) => {

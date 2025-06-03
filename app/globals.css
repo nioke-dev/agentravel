@@ -1,40 +1,12 @@
 @import "tailwindcss";
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-  
-  /* Kelas baru untuk skeleton dengan glassmorphism berkedip */
-  .blinking-glass-skeleton {
-    /*StyleGlassmorphismDasar*//*Warnadasarinibisadianggapsebagaifallbackatautransisiawal*/background: rgba(255, 255, 255, 0.1);
-    /*Untuklightmode,sedikittransparan*/backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    
-    /*Bayanganlembut*//*AnimasiBerkedip*/animation: blink-glass-background 4s infinite alternate, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    -webkit-animation: blink-glass-background 4s infinite alternate;
-}
-
-  /* Penyesuaian untuk dark mode jika diperlukan untuk base style (animasi akan tetap sama kecuali diubah) */
-  .dark .blinking-glass-skeleton {
-    background: rgba(30, 30, 30, 0.1); /* Warna dasar gelap, sedikit transparan */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
-
-/* Keyframes untuk animasi latar belakang berkedip */
-@keyframes blink-glass-background {
-  0% {
-    /* Warna pertama (misal: biru muda keunguan transparan) */
-    background-color: #e5eaf0; /* Opasitas sedikit lebih tinggi untuk visibilitas */
-  }
-  100% {
-    /* Warna kedua (misal: pink muda kemerahan transparan) */
-    background-color: #eff6ff; /* Opasitas sedikit lebih tinggi untuk visibilitas */
   }
 }
 
@@ -42,6 +14,7 @@ body {
   :root {
     --background: #888888;
     --foreground: 0 0% 3.9%;
+    --primary: #377dec;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;

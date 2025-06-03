@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useIsMobile } from "@/hooks/use-mobile"
@@ -9,7 +9,6 @@ import { CalendarDays, Ticket, ReceiptText, CircleDollarSign, TrendingUp } from 
 // import { useUser } from '@/app/context/UserContext';
 import { capitalizeWord } from "@/lib/capitalize";
 import { DashboardData } from "@/types/dashboardData";
-import { Skeleton } from "@/components/ui/skeleton"
 import { User } from "@/types/userType";
 import { getStatusClasses, STATUS_BASE_CLASSES } from "../ui/status-badge";
 
@@ -94,19 +93,15 @@ export function DashboardContent(
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((m) => (
           <Card key={m.title} className="bg-white rounded-2xl shadow-md border-0">
-            {loading ? (
-                <Skeleton className="h-28 w-full" />
-              ) : (
               <CardContent className="flex items-center justify-between p-4">
                 
                   <div>
                     <p className="text-xs font-medium text-gray-600 mb-1">{m.title}</p>
                     <p className="text-2xl font-bold text-gray-900">{m.value}</p>
                   </div>
-                  <div className={`p-2 rounded-lg bg-sitravel.blue `}>{m.icon}</div>
+                  <div className={"p-2 rounded-lg bg-var(--primary) "}>{m.icon}</div>
                 
               </CardContent>
-            )}
           </Card>
         ))}
       </div>
@@ -122,9 +117,6 @@ export function DashboardContent(
                 <CardTitle className="text-base font-semibold">Monthly Reservations Statistics</CardTitle>
               </CardHeader>
               <CardContent className="pt-0 p-4 overflow-x-auto">
-                {loading ? (
-                  <Skeleton className="h-[300px] w-full" />
-                ) : (
                   <div className="h-[300px]">
                     <ChartContainer config={chartConfig} className="min-h-[200px] w-full bg-var(--chart-1)">
                     <AreaChart
@@ -169,7 +161,6 @@ export function DashboardContent(
                     </AreaChart>
                     </ChartContainer>
                   </div>
-                )}
               </CardContent>
             </Card>
 
@@ -180,9 +171,6 @@ export function DashboardContent(
                 <a href="./dashboard/reservations" className="text-sm text-blue-600 hover:underline text-right">See All</a>
               </CardHeader>
                 <CardContent className="pt-0 p-4 overflow-x-auto">
-                {loading ? (
-                  <Skeleton className="h-[240px] w-full" />
-                ) : (
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-100">
                       <tr>
@@ -219,7 +207,6 @@ export function DashboardContent(
                       ))}
                     </tbody>
                   </table>
-                )}
                 </CardContent>
             </Card>
           </div>

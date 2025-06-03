@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
-import { Bell, User, ChevronDown } from "lucide-react"
+import { Bell, User, ChevronDown, CircleUserRound } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,6 +55,15 @@ export function Header({user} : { user: UserType }) {
     if (pathname.match(/^\/dashboard\/reservations\/[^\/]+\/update$/)) {
       return "Update Reservation"
     }
+    // Check for reservation detail page
+    if (pathname.match(/^\/dashboard\/invoices\/[^\/]+$/)) {
+      return "Invoice Details"
+    }
+    
+    // Check for reservation update page
+    if (pathname.match(/^\/dashboard\/invoices\/[^\/]+\/update$/)) {
+      return "Update Invoice"
+    }
 
     // Default title
     return "SITRAVEL"
@@ -105,7 +114,9 @@ export function Header({user} : { user: UserType }) {
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-[#377dec] text-white">ST</AvatarFallback>
+              <AvatarFallback className="bg-[#377dec]">
+                <CircleUserRound className="text-white h-8 w-8" />
+              </AvatarFallback>
             </Avatar>
             <span className="text-sm font-medium hidden md:inline">{ user?.username }</span>
             <ChevronDown size={16} className="text-[#888888] hidden md:inline" />

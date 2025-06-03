@@ -120,15 +120,15 @@ export default function InvoiceDataTable() {
   // function getDestination(inv: Invoice): React.ReactNode {
   //   throw new Error("Function not implemented.");
   // }
-  const getDestination = useCallback((inv: Invoice): React.ReactNode => {
-    if (inv.reservation_id && reservationDetails[inv.reservation_id]) {
-      return reservationDetails[inv.reservation_id].destination || '-'
-    }
-    if (inv.reservation?.destination) {
-      return inv.reservation.destination
-    }
-    return '-'
-  }, [reservationDetails])
+  // const getDestination = useCallback((inv: Invoice): React.ReactNode => {
+  //   if (inv.reservation_id && reservationDetails[inv.reservation_id]) {
+  //     return reservationDetails[inv.reservation_id].destination || '-'
+  //   }
+  //   if (inv.reservation?.destination) {
+  //     return inv.reservation.destination
+  //   }
+  //   return '-'
+  // }, [reservationDetails])
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -183,8 +183,8 @@ export default function InvoiceDataTable() {
               <th className="px-4 py-2 text-left">Reservation ID</th>
               <th className="px-4 py-2 text-left">Customer Name</th>
               <th className="px-4 py-2 text-left">Due Date</th>
-              <th className="px-4 py-2 text-left">Destination</th>
-              <th className="px-4 py-2 text-left">Issued Date</th>
+              {/* <th className="px-4 py-2 text-left">Destination</th> */}
+              {/* <th className="px-4 py-2 text-left">Issued Date</th> */}
               <th className="px-4 py-2 text-left">Payment Date</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">Total Amount</th>
@@ -216,10 +216,10 @@ export default function InvoiceDataTable() {
                     {getCustomerName(inv)}
                   </td>
                   <td className="px-4 py-2">{formatDate(inv.due_date)}</td>
-                  <td className="px-4 py-2">
+                  {/* <td className="px-4 py-2">
                     {getDestination(inv)}
-                  </td>
-                  <td className="px-4 py-2">{formatDate(inv.issued_date)}</td>
+                  </td> */}
+                  {/* <td className="px-4 py-2">{formatDate(inv.issued_date)}</td> */}
                   <td className="px-4 py-2">{inv.status === 'Paid' ? formatDate(inv.payment_date) : '-'}</td>
                   <td className="px-4 py-2">
                     <span

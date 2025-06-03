@@ -7,9 +7,19 @@ interface FormFieldProps {
   value: string | number;
   placeholder?: string;
   onChange: (val: string) => void;
+  readOnly?: boolean;
+  disabled?: boolean;
 }
 
-export function FormField({ label, type = "text", value, placeholder, onChange }: FormFieldProps) {
+export function FormField({ 
+  label, 
+  type = "text", 
+  value, 
+  placeholder, 
+  onChange, 
+  readOnly = false,
+  disabled = false,
+}: FormFieldProps) {
   return (
     <div>
       <label className="block text-sm font-medium mb-1">{label}</label>
@@ -19,6 +29,8 @@ export function FormField({ label, type = "text", value, placeholder, onChange }
         value={value}
         placeholder={placeholder}
         onChange={e => onChange(e.target.value)}
+        readOnly={readOnly}
+        disabled={disabled}
       />
     </div>
   );
