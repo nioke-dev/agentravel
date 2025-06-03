@@ -28,7 +28,10 @@ export function useReportForm(type: "Income" | "Expense") {
         return reports
             .filter(r => r.type === type)
             .filter(r => {
-                const matchSearch = r.description.toLowerCase().includes(q)
+                const matchSearch =
+                    r.description.toLowerCase().includes(q) ||
+                    r.amount.toLocaleString("id-ID").replaceAll(".", "").includes(q.replaceAll(".", "")) ||
+                    (r.createdAt && new Date(r.createdAt).toLocaleDateString("id-ID").includes(q))
                 const matchAmount = (() => {
                     switch (amountRange) {
                         case "lt1jt": return r.amount < 1_000_000
